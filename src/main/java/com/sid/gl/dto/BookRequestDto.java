@@ -3,12 +3,16 @@ package com.sid.gl.dto;
 import com.sid.gl.models.Author;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 
 @Data
 @AllArgsConstructor
+@EqualsAndHashCode
 public class BookRequestDto {
     private Long id;
 
@@ -18,7 +22,8 @@ public class BookRequestDto {
     private String isbn;
 
     private String description;
-    @NotEmpty(message = "author do not empty")
+
+    @NotNull(message = "Author info must be given")
     private Author author;
 
     private String filebook;

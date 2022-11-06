@@ -17,6 +17,7 @@ public class Book {
     private Long id;
     private String title;
     private String isbn;
+    @Lob
     private String description;
     @Embedded
     private Author author;
