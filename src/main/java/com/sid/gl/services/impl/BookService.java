@@ -44,14 +44,10 @@ public class BookService implements IBookService {
     try{
       log.info("call method to list all books");
       List<Book> bookList = bookRepository.findAll();
-      if(Objects.isNull(bookList)){
-        return Collections.emptyList();
-      }else{
-         bookResponseDTOS = bookList
-                .stream()
-                .map(BookMappers::convertToBookResponse)
-                .collect(Collectors.toList());
-      }
+      bookResponseDTOS = bookList
+             .stream()
+             .map(BookMappers::convertToBookResponse)
+             .collect(Collectors.toList());
       log.debug("all books are retrieving from database");
     }catch (Exception ex){
       log.error("Exception occured to retrieve all books {}",ex.getMessage());
@@ -76,5 +72,10 @@ public class BookService implements IBookService {
     }
 
     return bookResponseDTO;
+  }
+
+  @Override
+  public Book findByFileName(String fileName) {
+    return bookRepository.findByFileName(fileName);
   }
 }

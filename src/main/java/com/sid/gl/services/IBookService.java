@@ -12,4 +12,6 @@ public interface IBookService {
     Book addBook(BookRequestDto bookRequestDto) throws BusinessValidationException;
     List<BookResponseDTO> listBooks() throws BusinessValidationException;
     BookResponseDTO getBook(Long id) throws BooknotFoundException;
+
+    Book findByFileName(String fileName);
 }

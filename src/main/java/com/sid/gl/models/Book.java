@@ -22,6 +22,11 @@ public class Book {
     @Embedded
     private Author author;
     private String filebook;
+
+    @Column(name = "book_type")
     private String bookType;
+
+    @Column(name = "file_name")
+    private String fileName;
 
 }

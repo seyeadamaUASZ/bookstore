@@ -11,7 +11,14 @@ public class BookMappers {
 
     public static Book convertToBook(BookRequestDto bookRequestDto){
         Book book = new Book();
-        BeanUtils.copyProperties(bookRequestDto,book);
+        //BeanUtils.copyProperties(bookRequestDto,book);
+        book.setTitle(bookRequestDto.getTitle());
+        book.setAuthor(bookRequestDto.getAuthor());
+        book.setFileName(bookRequestDto.getFileName());
+        book.setFilebook(bookRequestDto.getFilebook());
+        book.setIsbn(bookRequestDto.getIsbn());
+        book.setDescription(bookRequestDto.getDescription());
+        book.setBookType(bookRequestDto.getBookType());
         return book;
     }
 

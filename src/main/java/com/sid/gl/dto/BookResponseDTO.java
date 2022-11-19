@@ -17,4 +17,5 @@ public class BookResponseDTO {
     private Author author;
     private String filebook;
     private String bookType;
+    private String fileName;
 }

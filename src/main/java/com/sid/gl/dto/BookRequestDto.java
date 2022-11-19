@@ -4,15 +4,15 @@ import com.sid.gl.models.Author;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 
 @Data
 @AllArgsConstructor
-@EqualsAndHashCode
+@NoArgsConstructor
 public class BookRequestDto {
     private Long id;
 
@@ -30,4 +30,6 @@ public class BookRequestDto {
 
     @NotBlank(message = "booktype must be not null")
     private String bookType;
+
+    private String fileName;
 }

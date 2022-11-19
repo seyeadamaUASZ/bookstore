@@ -6,14 +6,22 @@ import com.sid.gl.models.Book;
 import com.sid.gl.services.IBookService;
 import com.sid.gl.util.ApiResponse;
 import com.sid.gl.util.BookMappers;
+import com.sid.gl.util.FileStorageService;
+import com.sid.gl.util.JsonConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/book")
@@ -25,10 +33,15 @@ public class BookController {
 
     public static final String SUCCESS = "Success";
 
-    @PostMapping
-    public ResponseEntity<ApiResponse> createBook(@Valid @RequestBody BookRequestDto bookRequestDto){
+    private FileStorageService storageService;
+
+    @PostMapping(value="",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponse> createBook(@RequestParam("bookDTO") String request, @RequestParam(value = "file")Optional<MultipartFile> file){
+        BookRequestDto bookRequestDto = JsonConverter.convertToBookRequest(request);
         log.info("BookController:createBook request body {}", BookMappers.jsonObjectToString(bookRequestDto));
-        Book book = iBookService.addBook(bookRequestDto);
+        Book book = storageService.createBook(bookRequestDto,file);
         //Design pattern Builder
         ApiResponse<Book> apiResponse=ApiResponse
                 .<Book>builder()
@@ -67,9 +80,17 @@ public class BookController {
                 .results(bookResponseDTO)
                 .build();
 
-        log.info("ProductController::getProduct by id  {} response {}", bookId,BookMappers
+        log.info("BookController::getProduct by id  {} response {}", bookId,BookMappers
                 .jsonObjectToString(bookResponseDTO));
 
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
+
+    @GetMapping(value="/link/{fileName}",produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseBody
+    public FileSystemResource getimfileimage(@PathVariable("fileName") String fileName) throws IOException {
+        Book book = iBookService.findByFileName(fileName);
+        return new FileSystemResource(new File("./uploads/"+book.getFileName()));
+    }
+
 }
