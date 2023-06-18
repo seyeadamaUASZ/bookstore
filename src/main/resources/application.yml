@@ -1,0 +1,12 @@
+togglz:
+  features:
+    CREATE_BOOK:
+      enabled: true
+  features-file: 'feature.properties'
+  console:
+    secured: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'togglz'

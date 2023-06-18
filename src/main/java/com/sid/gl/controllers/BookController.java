@@ -10,12 +10,16 @@ import com.sid.gl.util.FileStorageService;
 import com.sid.gl.util.JsonConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.togglz.core.Feature;
+import org.togglz.core.manager.FeatureManager;
+import org.togglz.core.util.NamedFeature;
 
 import javax.validation.Valid;
 import java.io.File;
@@ -28,6 +32,10 @@ import java.util.Optional;
 @AllArgsConstructor
 //@Slf4j
 public class BookController {
+    @Autowired
+    private FeatureManager manager;
+
+    public static final Feature CREATE_BOOK = new NamedFeature("CREATE_BOOK");
 
     private IBookService iBookService;
 
@@ -41,6 +49,9 @@ public class BookController {
     public ResponseEntity<ApiResponse> createBook(@RequestParam("bookDTO") String request, @RequestParam(value = "file")Optional<MultipartFile> file){
         BookRequestDto bookRequestDto = JsonConverter.convertToBookRequest(request);
         //log.info("BookController:createBook request body {}", BookMappers.jsonObjectToString(bookRequestDto));
+        if(!manager.isActive(CREATE_BOOK)){
+            throw new RuntimeException("This fonctionality is not active");
+        }
         Book book = storageService.createBook(bookRequestDto,file);
         //Design pattern Builder
         ApiResponse<Book> apiResponse=ApiResponse
