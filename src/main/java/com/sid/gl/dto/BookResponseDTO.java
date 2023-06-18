@@ -18,4 +18,7 @@ public class BookResponseDTO {
     private String filebook;
     private String bookType;
     private String fileName;
+
+    public BookResponseDTO(BookResponseDTO bookResponseDTO) {
+    }
 }

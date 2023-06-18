@@ -26,7 +26,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/book")
 @AllArgsConstructor
-@Slf4j
+//@Slf4j
 public class BookController {
 
     private IBookService iBookService;
@@ -40,7 +40,7 @@ public class BookController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse> createBook(@RequestParam("bookDTO") String request, @RequestParam(value = "file")Optional<MultipartFile> file){
         BookRequestDto bookRequestDto = JsonConverter.convertToBookRequest(request);
-        log.info("BookController:createBook request body {}", BookMappers.jsonObjectToString(bookRequestDto));
+        //log.info("BookController:createBook request body {}", BookMappers.jsonObjectToString(bookRequestDto));
         Book book = storageService.createBook(bookRequestDto,file);
         //Design pattern Builder
         ApiResponse<Book> apiResponse=ApiResponse
@@ -48,7 +48,7 @@ public class BookController {
                 .status(SUCCESS)
                 .results(book)
                 .build();
-        log.info("BookController::createBook response {}", BookMappers.jsonObjectToString(book));
+        //log.info("BookController::createBook response {}", BookMappers.jsonObjectToString(book));
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
 
@@ -63,7 +63,7 @@ public class BookController {
                 .results(books)
                 .build();
 
-        log.info("BookController::getBooks response {}", BookMappers.jsonObjectToString(responseDTO));
+        //log.info("BookController::getBooks response {}", BookMappers.jsonObjectToString(responseDTO));
 
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
@@ -71,7 +71,7 @@ public class BookController {
     @GetMapping("/{bookId}")
     public ResponseEntity<?> getBook(@PathVariable long bookId) {
 
-        log.info("BookController::getBook by id  {}", bookId);
+        //log.info("BookController::getBook by id  {}", bookId);
 
         BookResponseDTO bookResponseDTO = iBookService.getBook(bookId);
         ApiResponse<BookResponseDTO> responseDTO = ApiResponse
@@ -80,8 +80,8 @@ public class BookController {
                 .results(bookResponseDTO)
                 .build();
 
-        log.info("BookController::getProduct by id  {} response {}", bookId,BookMappers
-                .jsonObjectToString(bookResponseDTO));
+        //log.info("BookController::getProduct by id  {} response {}", bookId,BookMappers
+             //   .jsonObjectToString(bookResponseDTO));
 
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
