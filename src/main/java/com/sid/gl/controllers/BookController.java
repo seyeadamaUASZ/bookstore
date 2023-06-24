@@ -5,11 +5,9 @@ import com.sid.gl.dto.BookResponseDTO;
 import com.sid.gl.models.Book;
 import com.sid.gl.services.IBookService;
 import com.sid.gl.util.ApiResponse;
-import com.sid.gl.util.BookMappers;
 import com.sid.gl.util.FileStorageService;
 import com.sid.gl.util.JsonConverter;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
@@ -21,7 +19,6 @@ import org.togglz.core.Feature;
 import org.togglz.core.manager.FeatureManager;
 import org.togglz.core.util.NamedFeature;
 
-import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -30,7 +27,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/book")
 @AllArgsConstructor
-//@Slf4j
 public class BookController {
     @Autowired
     private FeatureManager manager;
