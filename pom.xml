@@ -74,7 +74,48 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.12.0</version>
+		</dependency>
 	</dependencies>
+
+
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<jdbc.url>jdbc:mysql://localhost:3306/bookstore?serverTimezone=UTC</jdbc.url>
+				<jdbc.username>adama</jdbc.username>
+				<jdbc.password>password</jdbc.password>
+				<jdbc.driver>com.mysql.cj.jdbc.Driver</jdbc.driver>
+			</properties>
+		</profile>
+		<profile>
+			<id>test</id>
+			<properties>
+				<jdbc.url>jdbc:mysql://localhost:3306/bookstore?serverTimezone=UTC</jdbc.url>
+				<jdbc.username>root</jdbc.username>
+				<jdbc.password>passer123</jdbc.password>
+				<jdbc.driver>com.mysql.cj.jdbc.Driver</jdbc.driver>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<jdbc.url>jdbc:mysql://localhost:3306/bookstore?serverTimezone=UTC</jdbc.url>
+				<jdbc.username>root</jdbc.username>
+				<jdbc.password>passer123</jdbc.password>
+				<jdbc.driver>com.mysql.cj.jdbc.Driver</jdbc.driver>
+			</properties>
+		</profile>
+	</profiles>
 
 	<build>
 		<plugins>

@@ -7,6 +7,7 @@ import com.sid.gl.services.IBookService;
 import com.sid.gl.util.ApiResponse;
 import com.sid.gl.util.FileStorageService;
 import com.sid.gl.util.JsonConverter;
+import com.sid.gl.util.Translator;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/book")
+@RequestMapping("api/v1/book")
 @AllArgsConstructor
 public class BookController {
     @Autowired
@@ -44,9 +45,8 @@ public class BookController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse> createBook(@RequestParam("bookDTO") String request, @RequestParam(value = "file")Optional<MultipartFile> file){
         BookRequestDto bookRequestDto = JsonConverter.convertToBookRequest(request);
-        //log.info("BookController:createBook request body {}", BookMappers.jsonObjectToString(bookRequestDto));
         if(!manager.isActive(CREATE_BOOK)){
-            throw new RuntimeException("This fonctionality is not active");
+            throw new RuntimeException(Translator.toLocale("feature.not.activate"));
         }
         Book book = storageService.createBook(bookRequestDto,file);
         //Design pattern Builder
@@ -55,7 +55,6 @@ public class BookController {
                 .status(SUCCESS)
                 .results(book)
                 .build();
-        //log.info("BookController::createBook response {}", BookMappers.jsonObjectToString(book));
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
 
@@ -69,8 +68,6 @@ public class BookController {
                 .status(SUCCESS)
                 .results(books)
                 .build();
-
-        //log.info("BookController::getBooks response {}", BookMappers.jsonObjectToString(responseDTO));
 
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }

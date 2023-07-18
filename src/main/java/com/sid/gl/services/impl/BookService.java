@@ -8,12 +8,14 @@ import com.sid.gl.models.Book;
 import com.sid.gl.repository.BookRepository;
 import com.sid.gl.services.IBookService;
 import com.sid.gl.util.BookMappers;
+import com.sid.gl.util.Translator;
 import lombok.AllArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -21,7 +23,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class BookService implements IBookService {
   private BookRepository bookRepository;
-
 
   @Override
   public Book addBook(BookRequestDto bookRequestDto) throws BusinessValidationException {
@@ -38,30 +39,23 @@ public class BookService implements IBookService {
   @Override
   public List<BookResponseDTO> listBooks() throws BusinessValidationException {
     List<BookResponseDTO> bookResponseDTOS;
-    try{
       List<Book> bookList = bookRepository.findAll();
       bookResponseDTOS = bookList
              .stream()
+              .filter(Objects::nonNull)
              .map(BookMappers::convertToBookResponse)
              .collect(Collectors.toList());
 
-    }catch (Exception ex){
-      throw new BusinessValidationException("exception for get all books");
-    }
     return bookResponseDTOS;
 
   }
 
   @Override
   public BookResponseDTO getBook(Long id) throws BooknotFoundException {
-    BookResponseDTO bookResponseDTO;
-    try{
+      BookResponseDTO bookResponseDTO;
       Book book = bookRepository.findById(id)
-              .orElseThrow(()->new BooknotFoundException("book id not found ...."));
+              .orElseThrow(()->new BooknotFoundException(Translator.toLocale("bookstore.not.found")));
       bookResponseDTO = BookMappers.convertToBookResponse(book);
-    }catch(Exception ex){
-      throw new BooknotFoundException("Book id not found ");
-    }
 
     return bookResponseDTO;
 
