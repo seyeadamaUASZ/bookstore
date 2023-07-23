@@ -1,6 +1,6 @@
 # Server properties
 server:
-  port: 9001
+  port: 9090
 
 #Spring Properties
 spring:
@@ -9,9 +9,9 @@ spring:
 
   # Jpa Properties
   datasource:
-    url: jdbc:mysql://localhost:33061/bookstore?serverTimezone=UTC
-    username: adama
-    password: password
+    url: jdbc:mysql://${DB_HOST}/${DB_NAME}?autoReconnect=true&useSSL=false
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
