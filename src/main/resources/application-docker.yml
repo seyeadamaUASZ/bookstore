@@ -1,0 +1,28 @@
+# Server properties
+server:
+  port: 8080
+
+#Spring Properties
+spring:
+  application:
+    name: bookstore
+
+  # Jpa Properties
+  datasource:
+    url: jdbc:mysql://mysql:3306/bookstore?autoReconnect=true&useSSL=false
+    username: adama
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    generate-ddl: true
+    properties:
+      hibernate:
+        ddl-auto: update
+        show_sql: true
+
+  # Spring Session properties
+
+  devtools:
+    restart:
+      enabled: true
