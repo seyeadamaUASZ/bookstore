@@ -1,6 +1,6 @@
 node("master") {
   stage("Clone the project") {
-    git branch: 'master', url: 'https://github.com/seyeadamaUASZ/bookstore.git'
+    git branch: 'main', url: 'https://github.com/seyeadamaUASZ/bookstore.git'
   }
 
   stage("build") {
