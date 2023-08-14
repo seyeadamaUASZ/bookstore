@@ -11,6 +11,7 @@ import com.sid.gl.util.BookMappers;
 import com.sid.gl.util.Translator;
 import lombok.AllArgsConstructor;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class BookService implements IBookService {
   }
 
 
+  @Cacheable(value = "book")
   @Override
   public List<BookResponseDTO> listBooks() throws BusinessValidationException {
     List<BookResponseDTO> bookResponseDTOS;
@@ -51,6 +53,7 @@ public class BookService implements IBookService {
 
   }
 
+ @Cacheable(value = "book",key = "#id")
   @Override
   public BookResponseDTO getBook(Long id) throws BooknotFoundException {
       BookResponseDTO bookResponseDTO;
