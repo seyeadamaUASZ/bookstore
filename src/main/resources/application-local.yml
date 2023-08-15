@@ -1,0 +1,28 @@
+# Server properties
+server:
+  port: 9090
+
+#Spring Properties
+spring:
+  application:
+    name: bookstore
+
+  # Jpa Properties
+  datasource:
+    url: jdbc:mysql://localhost:3306/bookstore?serverTimezone=UTC&createDatabaseIfNotExist=true
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    generate-ddl: true
+    properties:
+      hibernate:
+        ddl-auto: update
+        show_sql: true
+
+  # Spring Session properties
+
+  devtools:
+    restart:
+      enabled: true

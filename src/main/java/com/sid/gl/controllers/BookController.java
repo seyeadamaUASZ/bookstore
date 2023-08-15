@@ -8,6 +8,10 @@ import com.sid.gl.util.ApiResponse;
 import com.sid.gl.util.FileStorageService;
 import com.sid.gl.util.JsonConverter;
 import com.sid.gl.util.Translator;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -40,6 +44,16 @@ public class BookController {
 
     private FileStorageService storageService;
 
+
+    @Operation( summary = "upload book and save",
+            description = "save book",
+            tags = { "book", "post" })
+    @ApiResponses(
+            {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Book.class), mediaType = "application/json") }),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) }
+    )
     @PostMapping(value="",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -58,6 +72,15 @@ public class BookController {
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
 
+    @Operation( summary = "Get all books",
+            description = "get all books",
+            tags = { "book", "get" })
+    @ApiResponses(
+            {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Book.class), mediaType = "application/json") }),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) }
+    )
     @GetMapping
     public ResponseEntity<ApiResponse> getBooks() {
 
@@ -72,6 +95,15 @@ public class BookController {
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
+    @Operation( summary = "get book with id",
+            description = "book id",
+            tags = { "book", "get" })
+    @ApiResponses(
+            {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Book.class), mediaType = "application/json") }),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) }
+    )
     @GetMapping("/{bookId}")
     public ResponseEntity<?> getBook(@PathVariable long bookId) {
 
@@ -89,6 +121,16 @@ public class BookController {
 
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
+
+    @Operation( summary = "get book with filename",
+            description = "book filename",
+            tags = { "book", "get" })
+    @ApiResponses(
+            {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Book.class), mediaType = "application/json") }),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) }
+    )
 
     @GetMapping(value="/link/{fileName}",produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
