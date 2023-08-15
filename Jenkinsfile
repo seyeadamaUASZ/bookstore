@@ -22,7 +22,7 @@ node("master") {
         when {
           branch 'main'
         }
-        steps{
+        step {
            bat 'mvn clean compile jib:build'
         }
      }
