@@ -1,29 +1,33 @@
-node("master") {
+pipeline {
+ any agent
+ stages{
+   stage("checkout scm"){
+       checkout scm
+    }
 
- stage("checkout scm"){
-    checkout scm
- }
-
-  stage("build") {
-    bat "mvn clean install -DskipTests"
-  }
-
-   stage("package") {
-         bat "mvn clean package"
-   }
-
-    stage('Scan Quality code'){
-         withSonarQubeEnv(installationName:'sonar'){
-              bat 'mvn clean install -DskipTests org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Dsonar.java.binaries=target/classes'
-         }
+     stage("build") {
+       bat "mvn clean install -DskipTests"
      }
 
-     stage('Docker Build & push') {
-        if(env.branch=='main'){
-            steps {
-               bat 'mvn clean compile jib:build'
-             }
+      stage("package") {
+            bat "mvn clean package"
+      }
+
+       stage('Scan Quality code'){
+            withSonarQubeEnv(installationName:'sonar'){
+                 bat 'mvn clean install -DskipTests org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Dsonar.java.binaries=target/classes'
+            }
         }
-     }
+
+        stage('Docker Build & push') {
+          when {
+             branch 'main'
+           }
+           steps {
+              bat 'mvn clean compile jib:build'
+            }
+        }
+
+}
 
 }
