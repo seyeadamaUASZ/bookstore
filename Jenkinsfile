@@ -1,12 +1,8 @@
 node("master") {
 
-  stage("build") {
-    bat "mvn clean install -DskipTests"
+  stage("build & test") {
+    bat "mvn clean install"
   }
-
-  stage("run test") {
-      bat "mvn test"
-   }
 
    stage("package") {
          bat "mvn clean package"
