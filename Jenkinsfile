@@ -1,5 +1,9 @@
 node("master") {
 
+ stage("clone project"){
+     git 'https://github.com/seyeadamaUASZ/bookstore.git'
+ }
+
   stage("build & test") {
     bat "mvn clean install"
   }
