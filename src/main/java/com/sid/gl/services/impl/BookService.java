@@ -70,15 +70,5 @@ public class BookService implements IBookService {
     return bookRepository.findByFileName(fileName);
   }
 
-  //other implementation using map
-  public BookResponseDTO getOneBook(Long id){
-     return Optional
-             .of(bookRepository.findById(id))
-             .filter(Optional::isPresent)
-             .map(Optional::get)
-             .map(BookMappers::convertToBookResponse)
-             .map(BookResponseDTO::new)
-             .get();
-  }
 
 }
