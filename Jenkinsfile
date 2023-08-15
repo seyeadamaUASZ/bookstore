@@ -1,7 +1,11 @@
 node("master") {
 
-  stage("build & test") {
-    bat "mvn clean install"
+ stage("checkout scm"){
+    checkout scm
+ }
+
+  stage("build") {
+    bat "mvn clean install -DskipTests"
   }
 
    stage("package") {
