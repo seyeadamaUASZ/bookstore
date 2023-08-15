@@ -20,7 +20,7 @@ node("master") {
 
      stage('Docker Build & push') {
         when {
-          branch 'main'
+          branch "main"
         }
         steps{
            bat 'mvn clean compile jib:build'
