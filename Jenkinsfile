@@ -1,15 +1,8 @@
 node("master") {
-  stage("Clone the project") {
-    git branch: 'main', url: 'https://github.com/seyeadamaUASZ/bookstore.git'
-  }
 
-  stage("build") {
-    bat "mvn clean install -DskipTests"
+  stage("build & test") {
+    bat "mvn clean install"
   }
-
-  stage("run test") {
-      bat "mvn test"
-   }
 
    stage("package") {
          bat "mvn clean package"
@@ -22,6 +15,9 @@ node("master") {
      }
 
      stage('Docker Build & push') {
+        when{
+          branch 'main'
+        }
         bat 'mvn clean compile jib:build'
      }
 
