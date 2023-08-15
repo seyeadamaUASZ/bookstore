@@ -19,11 +19,9 @@ node("master") {
      }
 
      stage('Docker Build & push') {
-        when {
-          branch 'main'
+        if(env.BRANCH_NAME=='main'){
+          bat 'mvn clean compile jib:build'
         }
-        steps{
-           bat 'mvn clean compile jib:build'
-        }
+
      }
 }
