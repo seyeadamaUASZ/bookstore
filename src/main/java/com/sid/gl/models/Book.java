@@ -28,5 +28,7 @@ public class Book {
 
     @Column(name = "file_name")
     private String fileName;
-
+    //key file
+    @Column(name = "file_key")
+    private String fileKey;
 }

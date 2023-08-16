@@ -27,9 +27,9 @@ public class LoggingAspect {
         Object[] array= jpj.getArgs();
         log.info("method invoked " + className + " : " + methodName + "()" + "arguments : "
                 + mapper.writeValueAsString(array));
-        Object object = jpj.proceed();
-        log.info(className + " : " + methodName + "()" + "Response : "
-                + mapper.writeValueAsString(object));
+       Object object = jpj.proceed();
+        //log.info(className + " : " + methodName + "()" + "Response : "
+               // + mapper.writeValueAsString(object));
         return object;
     }
 }

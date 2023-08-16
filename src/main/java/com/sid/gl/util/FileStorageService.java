@@ -64,7 +64,7 @@ public class FileStorageService {
 
                bookRequestDto.setFilebook(fileDownloadUri);
                bookRequestDto.setFileName(fileName);
-               System.out.println(" null object "+BookMappers.jsonObjectToString(bookRequestDto));
+               //System.out.println(" null object "+BookMappers.jsonObjectToString(bookRequestDto));
                return bookRepository.save(BookMappers.convertToBook(bookRequestDto));
            }catch (IOException ex) {
                throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
