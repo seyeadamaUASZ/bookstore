@@ -4,7 +4,7 @@ node("master") {
     checkout scm
  }
 
-  stage("build") {
+  stage("build & test") {
     bat "mvn clean install"
   }
 
