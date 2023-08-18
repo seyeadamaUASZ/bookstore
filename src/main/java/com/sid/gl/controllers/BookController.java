@@ -1,5 +1,6 @@
 package com.sid.gl.controllers;
 
+import com.sid.gl.constants.ApiPaths;
 import com.sid.gl.dto.BookRequestDto;
 import com.sid.gl.dto.BookResponseDTO;
 import com.sid.gl.models.Book;
@@ -14,7 +15,6 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/v1/book")
+@RequestMapping(ApiPaths.BASE_URL+ApiPaths.BOOK_URL)
 @AllArgsConstructor
 public class BookController {
     @Autowired
@@ -57,7 +57,7 @@ public class BookController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse> createBook(@RequestParam("bookDTO") String request, @RequestParam(value = "file")Optional<MultipartFile> file){
         BookRequestDto bookRequestDto = JsonConverter.convertToBookRequest(request);
-        if(!checkFlip()){
+        if(checkFlipNotActivate()){
             throw new RuntimeException(Translator.toLocale("feature.not.activate"));
         }
         Book book = storageService.createBook(bookRequestDto,file);
@@ -85,15 +85,16 @@ public class BookController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse> create(@RequestParam("bookDTO") String request, @RequestParam(value = "file")Optional<MultipartFile> file){
-        if(!checkFlip()){
+        if(checkFlipNotActivate()){
             throw new RuntimeException(Translator.toLocale("feature.not.activate"));
         }
-        Book book = iBookService.createBookWithFile(request,file);
-        ApiResponse<Book> apiResponse=ApiResponse
-                .<Book>builder()
+        BookResponseDTO bookResult = iBookService.createBookWithFile(request,file);
+        ApiResponse<BookResponseDTO> apiResponse=ApiResponse
+                .<BookResponseDTO>builder()
                 .status(SUCCESS)
-                .results(book)
+                .results(bookResult)
                 .build();
+
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
 
@@ -150,7 +151,6 @@ public class BookController {
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) }
     )
-
     @GetMapping(value="/link/{fileName}",produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
     public FileSystemResource getImfileimage(@PathVariable("fileName") String fileName) throws IOException {
@@ -160,6 +160,15 @@ public class BookController {
 
     //get Object on minio bucket
 
+    @Operation( summary = "get book with key stored on minio",
+            description = "get book with key file",
+            tags = { "book", "get" })
+    @ApiResponses(
+            {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Book.class), mediaType = "application/json") }),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) }
+    )
     @GetMapping(value = "/check/{key}" ,consumes = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<Resource> check(@PathVariable(name = "key") String key){
        byte[] bytes = iBookService.getObject(key);
@@ -168,7 +177,7 @@ public class BookController {
                 .body(new ByteArrayResource(bytes));
     }
 
-    private boolean checkFlip(){
-        return manager.isActive(CREATE_BOOK);
+    private boolean checkFlipNotActivate(){
+        return !manager.isActive(CREATE_BOOK);
     }
 }

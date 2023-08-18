@@ -10,8 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class LoggingAspect {
     Logger log = LoggerFactory.getLogger(LoggingAspect.class);
     @Pointcut(value="execution(* com.sid.gl.*.*.*(..))")
@@ -28,8 +28,8 @@ public class LoggingAspect {
         log.info("method invoked " + className + " : " + methodName + "()" + "arguments : "
                 + mapper.writeValueAsString(array));
        Object object = jpj.proceed();
-        //log.info(className + " : " + methodName + "()" + "Response : "
-               // + mapper.writeValueAsString(object));
+        log.info(className + " : " + methodName + "()" + "Response : "
+                + mapper.writeValueAsString(object));
         return object;
     }
 }

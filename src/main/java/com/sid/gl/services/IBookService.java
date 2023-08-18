@@ -18,7 +18,7 @@ public interface IBookService {
 
     Book findByFileName(String fileName);
 
-    Book createBookWithFile(String request, Optional<MultipartFile> file) throws IOException;
+    BookResponseDTO createBookWithFile(String request, Optional<MultipartFile> file) throws IOException;
 
     byte[] getObject(String key);
 }

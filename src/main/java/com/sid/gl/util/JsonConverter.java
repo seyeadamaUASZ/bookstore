@@ -1,5 +1,6 @@
 package com.sid.gl.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sid.gl.dto.BookRequestDto;
@@ -17,5 +18,10 @@ public class JsonConverter {
             e.printStackTrace();
         }
         return dto;
+    }
+
+    public static String convertToString(Object object) throws JsonProcessingException {
+       ObjectMapper mapper = new ObjectMapper();
+       return mapper.writeValueAsString(object);
     }
 }
