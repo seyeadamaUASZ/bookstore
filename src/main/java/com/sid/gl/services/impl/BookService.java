@@ -43,7 +43,7 @@ public class BookService implements IBookService {
       return saveBook(bookRequestDto);
     }
 
-  @Cacheable(value = "book")
+  @Cacheable(value = "books")
   @Override
   public List<BookResponseDTO> listBooks() throws BusinessValidationException {
 
@@ -59,7 +59,7 @@ public class BookService implements IBookService {
 
   }
 
- @Cacheable(value = "book",key = "#id")
+ @Cacheable(value = "book")
   @Override
   public BookResponseDTO getBook(Long id) throws BooknotFoundException {
       BookResponseDTO bookResponseDTO;

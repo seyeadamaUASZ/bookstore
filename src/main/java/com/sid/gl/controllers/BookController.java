@@ -3,6 +3,7 @@ package com.sid.gl.controllers;
 import com.sid.gl.constants.ApiPaths;
 import com.sid.gl.dto.BookRequestDto;
 import com.sid.gl.dto.BookResponseDTO;
+import com.sid.gl.exceptions.FlipException;
 import com.sid.gl.models.Book;
 import com.sid.gl.services.IBookService;
 import com.sid.gl.util.*;
@@ -58,7 +59,7 @@ public class BookController {
     public ResponseEntity<ApiResponse> createBook(@RequestParam("bookDTO") String request, @RequestParam(value = "file")Optional<MultipartFile> file){
         BookRequestDto bookRequestDto = JsonConverter.convertToBookRequest(request);
         if(checkFlipNotActivate()){
-            throw new RuntimeException(Translator.toLocale("feature.not.activate"));
+            throw new FlipException(Translator.toLocale("feature.not.activate"));
         }
         Book book = storageService.createBook(bookRequestDto,file);
         //Design pattern Builder
@@ -86,7 +87,7 @@ public class BookController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse> create(@RequestParam("bookDTO") String request, @RequestParam(value = "file")Optional<MultipartFile> file){
         if(checkFlipNotActivate()){
-            throw new RuntimeException(Translator.toLocale("feature.not.activate"));
+            throw new FlipException(Translator.toLocale("feature.not.activate"));
         }
         BookResponseDTO bookResult = iBookService.createBookWithFile(request,file);
         ApiResponse<BookResponseDTO> apiResponse=ApiResponse
@@ -130,7 +131,7 @@ public class BookController {
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) }
     )
     @GetMapping("/{bookId}")
-    public ResponseEntity<?> getBook(@PathVariable long bookId) {
+    public ResponseEntity<ApiResponse> getBook(@PathVariable long bookId) {
 
         BookResponseDTO bookResponseDTO = iBookService.getBook(bookId);
         ApiResponse<BookResponseDTO> responseDTO = ApiResponse
