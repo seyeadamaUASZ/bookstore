@@ -23,9 +23,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.togglz.core.Feature;
-import org.togglz.core.manager.FeatureManager;
-import org.togglz.core.util.NamedFeature;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,12 +30,12 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(ApiPaths.BASE_URL+ApiPaths.BOOK_URL)
+@RequestMapping(ApiPaths.BASE_URL+ApiPaths.API_VERSION+ApiPaths.BOOK_URL)
 @AllArgsConstructor
 public class BookController {
-    @Autowired
-    private FeatureManager manager;
-    public static final Feature CREATE_BOOK = new NamedFeature("CREATE_BOOK");
+    /*@Autowired
+    private FeatureManager manager;*/
+    //public static final Feature CREATE_BOOK = new NamedFeature("CREATE_BOOK");
     private IBookService iBookService;
     public static final String SUCCESS = "Success";
     private FileStorageService storageService;
@@ -58,9 +55,9 @@ public class BookController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse> createBook(@RequestParam("bookDTO") String request, @RequestParam(value = "file")Optional<MultipartFile> file){
         BookRequestDto bookRequestDto = JsonConverter.convertToBookRequest(request);
-        if(checkFlipNotActivate()){
+        /*if(checkFlipNotActivate()){
             throw new FlipException(Translator.toLocale("feature.not.activate"));
-        }
+        }*/
         Book book = storageService.createBook(bookRequestDto,file);
         //Design pattern Builder
         ApiResponse<Book> apiResponse=ApiResponse
@@ -86,9 +83,9 @@ public class BookController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse> create(@RequestParam("bookDTO") String request, @RequestParam(value = "file")Optional<MultipartFile> file){
-        if(checkFlipNotActivate()){
+       /* if(checkFlipNotActivate()){
             throw new FlipException(Translator.toLocale("feature.not.activate"));
-        }
+        }*/
         BookResponseDTO bookResult = iBookService.createBookWithFile(request,file);
         ApiResponse<BookResponseDTO> apiResponse=ApiResponse
                 .<BookResponseDTO>builder()
@@ -117,7 +114,6 @@ public class BookController {
                 .status(SUCCESS)
                 .results(books)
                 .build();
-
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
@@ -178,7 +174,7 @@ public class BookController {
                 .body(new ByteArrayResource(bytes));
     }
 
-    private boolean checkFlipNotActivate(){
-        return !manager.isActive(CREATE_BOOK);
-    }
+    //private boolean checkFlipNotActivate(){
+        //return !manager.isActive(CREATE_BOOK);
+    //}
 }

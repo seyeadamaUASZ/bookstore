@@ -1,6 +1,7 @@
 package com.sid.gl;
 
 
+import com.sid.gl.config.RedisConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;

@@ -15,21 +15,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BookRequestDto {
     private Long id;
-
     @NotBlank(message = "title not empty !!")
     private String title;
     @NotBlank(message = "isbn not empty")
     private String isbn;
-
     private String description;
-
     @NotNull(message = "Author info must be given")
     private Author author;
-
-    private String filebook;
-
     @NotBlank(message = "booktype must be not null")
     private String bookType;
 
-    private String fileName;
 }
