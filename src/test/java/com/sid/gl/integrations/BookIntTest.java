@@ -43,6 +43,7 @@ public class BookIntTest {
         ResponseEntity<ApiResponse> response = restTemplate.exchange(getRootUrl()+"/book",
                 HttpMethod.GET, entity,ApiResponse.class);
         Assert.assertNotNull(response.getBody());
+        Assert.assertEquals("Success",response.getBody().getStatus());
 
     }
 
