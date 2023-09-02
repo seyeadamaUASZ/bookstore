@@ -1,2 +1,3 @@
 Syntax error found near VALUES Clause (SELECT Statement): insert into td_book (id, contacts, name, resume, book_type, description, file_name, filebook, isbn, title) values (default, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 Syntax error found near VALUES Clause (SELECT Statement): insert into td_book (id, contacts, name, resume, book_type, description, file_key, file_name, filebook, isbn, title) values (default, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Syntax error found near VALUES Clause (SELECT Statement): insert into td_book (contacts,name,resume,book_type,description,file_key,file_name,filebook,isbn,title,id) values (?,?,?,?,?,?,?,?,?,?,default)
