@@ -20,7 +20,17 @@ spring:
       hibernate:
         ddl-auto: update
         show_sql: true
-
+  # flyway configuration
+  flyway:
+    enabled: true
+    url: jdbc:mysql://localhost:3306/bookstore?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+    user: root
+    password:
+    group: true
+    sql-migration-prefix: V
+    sql-migration-separator: __
+    sql-migration-suffixes: .sql
+    baseline-on-migrate: true
   # Spring Session properties
 
   devtools:
