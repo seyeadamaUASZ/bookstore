@@ -4,9 +4,13 @@ node("master") {
     checkout scm
  }
 
-  stage("build & test") {
-    bat "mvn clean install"
-  }
+  stage("build") {
+      bat "mvn clean install -DskipTests"
+    }
+
+    stage("test"){
+    bat "mvn test"
+    }
 
    stage("package") {
          bat "mvn clean package"
