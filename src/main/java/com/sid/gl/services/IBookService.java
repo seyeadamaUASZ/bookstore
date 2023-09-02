@@ -2,6 +2,7 @@ package com.sid.gl.services;
 
 import com.sid.gl.dto.BookRequestDto;
 import com.sid.gl.dto.BookResponseDTO;
+import com.sid.gl.dto.SearchRequestDTO;
 import com.sid.gl.exceptions.BooknotFoundException;
 import com.sid.gl.exceptions.BusinessValidationException;
 import com.sid.gl.models.Book;
@@ -14,4 +15,8 @@ public interface IBookService {
     BookResponseDTO getBook(Long id) throws BooknotFoundException;
 
     Book findByFileName(String fileName);
+
+    List<BookResponseDTO> searchByTitleOrIsbnOrBookType(SearchRequestDTO searchRequestDTO);
+
+    List<BookResponseDTO> searchBook(SearchRequestDTO dto);
 }

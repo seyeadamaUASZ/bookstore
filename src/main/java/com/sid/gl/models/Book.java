@@ -1,14 +1,13 @@
 package com.sid.gl.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name="td_book")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Book {
@@ -29,5 +28,6 @@ public class Book {
 
     @Column(name = "file_name")
     private String fileName;
+    private double price;
 
 }
