@@ -8,6 +8,10 @@ node("master") {
     bat "mvn clean install -DskipTests"
   }
 
+  stage("test"){
+  bat "mvn test"
+  }
+
    stage("package") {
          bat "mvn clean package"
    }
