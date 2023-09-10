@@ -2,6 +2,17 @@ spring:
   profiles:
     active: local
 
+
+resilience4j.ratelimiter:
+  instances:
+    backendA:
+      limitForPeriod: 10
+      limitRefreshPeriod: 5s
+      timeoutDuration: 60s
+      registerHealthIndicator: true
+      eventConsumerBufferSize: 100
+
+
 #togglz:
 #  features:
 #    CREATE_BOOK:
@@ -14,3 +25,15 @@ spring:
 #    web:
 #      exposure:
 #        include: 'togglz'
+
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS
+  health:
+    ratelimiters:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"

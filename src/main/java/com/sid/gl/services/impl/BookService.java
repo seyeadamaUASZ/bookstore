@@ -12,6 +12,10 @@ import com.sid.gl.util.BookMappers;
 import com.sid.gl.util.JsonConverter;
 import com.sid.gl.util.Translator;
 import com.sid.gl.validators.DocumentValidator;
+import io.github.resilience4j.ratelimiter.RateLimiterRegistry;
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 
 import lombok.SneakyThrows;
@@ -22,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import java.util.Objects;
@@ -35,7 +40,17 @@ public class BookService implements IBookService {
   private BookRepository bookRepository;
   @Autowired
   private MinioAdapter minioAdapter;
+  @Autowired
+  private RateLimiterRegistry registry;
 
+
+  @PostConstruct
+  public void postContruct(){
+      io.github.resilience4j.ratelimiter.RateLimiter.EventPublisher eventPublisher = registry.rateLimiter("backendA").getEventPublisher();
+      eventPublisher.onEvent(event -> log.info("Simple Rate Limit - On Event. Event Details: " + event));
+      eventPublisher.onSuccess(event -> log.info("Simple Rate Limit - On Success. Event Details: " + event));
+      eventPublisher.onFailure(event -> log.info("Simple Rate Limit - On Failure. Event Details: " + event));
+  }
 
   @SneakyThrows
   @Override
@@ -43,10 +58,10 @@ public class BookService implements IBookService {
       return saveBook(bookRequestDto);
     }
 
-  @Cacheable(value = "books")
-  @Override
+    @RateLimiter(name = "backendA",fallbackMethod = "getResultFallbackMethod")
+    @Cacheable(value = "books")
+    @Override
   public List<BookResponseDTO> listBooks() throws BusinessValidationException {
-
     List<BookResponseDTO> bookResponseDTOS;
       List<Book> bookList = bookRepository.findAll();
       bookResponseDTOS = bookList
@@ -57,6 +72,12 @@ public class BookService implements IBookService {
     log.info("retrieve all books");
     return bookResponseDTOS;
 
+  }
+
+  private List<BookResponseDTO> getResultFallbackMethod(RequestNotPermitted requestNotPermitted){
+      log.info("fail request api calling");
+      log.info("RequestNotPermitted exception message: {}", requestNotPermitted.getMessage());
+      return Collections.emptyList();
   }
 
  @Cacheable(value = "book")

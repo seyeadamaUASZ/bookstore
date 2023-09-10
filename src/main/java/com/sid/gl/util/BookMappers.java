@@ -20,7 +20,11 @@ public class BookMappers {
 
     public static BookResponseDTO convertToBookResponse(Book book){
         BookResponseDTO response = new BookResponseDTO();
-        BeanUtils.copyProperties(book,response);
+        response.setId(book.getId());
+        response.setIsbn(book.getIsbn());
+        response.setBookType(book.getBookType());
+        response.setDescription(book.getDescription());
+        response.setAuthor(book.getAuthor());
         return response;
     }
 
