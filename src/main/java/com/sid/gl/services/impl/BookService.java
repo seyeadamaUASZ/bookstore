@@ -46,7 +46,7 @@ public class BookService implements IBookService {
   }
 
 
-  @Cacheable(value = "book")
+  //@Cacheable(value = "book")
   @Override
   public List<BookResponseDTO> listBooks() throws BusinessValidationException {
     List<BookResponseDTO> bookResponseDTOS;

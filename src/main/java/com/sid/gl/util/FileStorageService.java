@@ -1,6 +1,6 @@
 package com.sid.gl.util;
 
-import java.io.File;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,6 +13,7 @@ import com.sid.gl.exceptions.FileStorageException;
 import com.sid.gl.exceptions.UploadException;
 import com.sid.gl.models.Book;
 import com.sid.gl.repository.BookRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -21,7 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
 @Service
-
+@Slf4j
 public class FileStorageService {
     private final Path fileStorageLocation;
     @Autowired
@@ -35,6 +36,7 @@ public class FileStorageService {
 
     @Autowired
     public FileStorageService(FileStorageProperties fileStorageProperties) {
+        log.info("create directory instance ....");
         this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
                 .toAbsolutePath().normalize();
         try {
@@ -58,7 +60,7 @@ public class FileStorageService {
                Files.copy(fileBook.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
                fileDownloadUri= ServletUriComponentsBuilder.fromCurrentContextPath()
-                       .path("/book/downloadImageUri/")
+                       .path("api/v1/book/downloadImageUri/")
                        .path(fileName)
                        .toUriString();
 

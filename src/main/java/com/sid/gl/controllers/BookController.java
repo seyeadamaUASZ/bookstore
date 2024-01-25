@@ -90,7 +90,6 @@ public class BookController {
     public ResponseEntity<ApiResponse> getBooks() {
 
         List<BookResponseDTO> books = iBookService.listBooks();
-        //Builder Design pattern (to avoid complex object creation headache)
         ApiResponse<List<BookResponseDTO>> responseDTO = ApiResponse
                 .<List<BookResponseDTO>>builder()
                 .status(SUCCESS)
@@ -137,9 +136,9 @@ public class BookController {
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) }
     )
 
-    @GetMapping(value="/link/{fileName}",produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value="/downloadImageUri/{fileName}",produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
-    public FileSystemResource getimfileimage(@PathVariable("fileName") String fileName) throws IOException {
+    public FileSystemResource getimfileimage(@PathVariable("fileName") String fileName) {
         Book book = iBookService.findByFileName(fileName);
         return new FileSystemResource(new File("./uploads/"+book.getFileName()));
     }
