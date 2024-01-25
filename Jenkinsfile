@@ -1,34 +1,52 @@
-node("master") {
 
- stage("checkout scm"){
-    checkout scm
- }
+pipeline {
+	agent any
 
-  stage("build") {
-    bat "mvn clean install -DskipTests"
-  }
+	environment {
+		mavenHome = tool 'jenkins-maven'
+	}
 
-  stage("test"){
-  bat "mvn test"
-  }
+	stages {
 
-   stage("package") {
-         bat "mvn clean package"
-   }
+		stage('Build'){
+			steps {
+				bat "mvn clean install -DskipTests"
+			}
+		}
 
-    stage('Scan Quality code'){
-         withSonarQubeEnv(installationName:'sonar'){
-              bat 'mvn clean install -DskipTests org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Dsonar.java.binaries=target/classes'
-         }
-     }
+		stage('Test'){
+			steps{
+				bat "mvn test"
+			}
+		}
 
-     stage('Docker Build & push') {
-          if(env.BRANCH_NAME=='main'){
-            bat 'mvn clean compile jib:build'
-          }
-          if(env.BRANCH_NAME != 'main'){
-            echo 'do nothing here'
-          }
-    }
+	 	stage('sonar quality'){
+	 	steps {
+	 	   withSonarQubeEnv(installationName:'sonarqube'){
+                    bat 'mvn clean install -DskipTests org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Dsonar.java.binaries=target/classes'
+            }
+	 	}
+	 }
 
+	//stage('Deploy jar to nexus repo') {
+       // steps {
+           // bat "mvn jar:jar deploy:deploy"
+        //}
+    //}
+
+	 stage('Docker and push'){
+	     steps{
+	         bat 'mvn clean compile jib:build'
+	     }
+	 }
+
+	// stage('deploy app to kubernetes cluster'){
+    //        steps {
+    //          //script {
+    //             //kubernetesDeploy(configs: "postgres-deployment.yml","start-domain.yml")
+    //          //}
+    //          bat 'cd k8s && kubectl apply -f .'
+    //        }
+    //     }
+	}
 }

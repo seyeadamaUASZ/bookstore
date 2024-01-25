@@ -1,7 +1,9 @@
 package com.sid.gl.controllers;
 
+import com.sid.gl.constants.ApiPath;
 import com.sid.gl.dto.BookRequestDto;
 import com.sid.gl.dto.BookResponseDTO;
+import com.sid.gl.dto.SearchRequestDTO;
 import com.sid.gl.models.Book;
 import com.sid.gl.services.IBookService;
 import com.sid.gl.util.ApiResponse;
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
@@ -24,17 +27,19 @@ import org.togglz.core.Feature;
 import org.togglz.core.manager.FeatureManager;
 import org.togglz.core.util.NamedFeature;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RestController
-@RequestMapping("api/v1/book")
+@RequestMapping(ApiPath.API_V+"book")
 @AllArgsConstructor
 public class BookController {
-    @Autowired
-    private FeatureManager manager;
+
+    private final FeatureManager manager;
 
     public static final Feature CREATE_BOOK = new NamedFeature("CREATE_BOOK");
 
@@ -85,7 +90,6 @@ public class BookController {
     public ResponseEntity<ApiResponse> getBooks() {
 
         List<BookResponseDTO> books = iBookService.listBooks();
-        //Builder Design pattern (to avoid complex object creation headache)
         ApiResponse<List<BookResponseDTO>> responseDTO = ApiResponse
                 .<List<BookResponseDTO>>builder()
                 .status(SUCCESS)
@@ -132,11 +136,25 @@ public class BookController {
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) }
     )
 
-    @GetMapping(value="/link/{fileName}",produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value="/downloadImageUri/{fileName}",produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
-    public FileSystemResource getimfileimage(@PathVariable("fileName") String fileName) throws IOException {
+    public FileSystemResource getimfileimage(@PathVariable("fileName") String fileName) {
         Book book = iBookService.findByFileName(fileName);
         return new FileSystemResource(new File("./uploads/"+book.getFileName()));
+    }
+
+    //search using criteria
+
+    @GetMapping("/search-book")
+    public ResponseEntity<?> searchBookWithOptions(@Valid SearchRequestDTO searchRequestDTO){
+        log.info("option search book {} .... ",searchRequestDTO);
+        List<BookResponseDTO> list = iBookService.searchBook(searchRequestDTO);
+        ApiResponse<List<BookResponseDTO>> responseDTO = ApiResponse
+                .<List<BookResponseDTO>>builder()
+                .status(SUCCESS)
+                .results(list)
+                .build();
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
 }
