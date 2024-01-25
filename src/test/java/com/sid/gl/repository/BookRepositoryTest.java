@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-@Disabled(value = "disable for to fix")
+//@Disabled(value = "disable for to fix")
 @DataJpaTest
 class BookRepositoryTest {
     @Autowired
