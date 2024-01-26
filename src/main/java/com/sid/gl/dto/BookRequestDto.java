@@ -3,7 +3,6 @@ package com.sid.gl.dto;
 import com.sid.gl.models.Author;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;

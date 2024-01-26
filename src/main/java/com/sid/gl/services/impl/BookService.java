@@ -79,7 +79,7 @@ public class BookService implements IBookService {
   }
 
 
-  //TODO: first approche
+
     @Override
     public List<BookResponseDTO> searchByTitleOrIsbnOrBookType(SearchRequestDTO searchRequestDTO) {
         ObjectMapper mapper = new ObjectMapper();
@@ -89,8 +89,7 @@ public class BookService implements IBookService {
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
-            System.out.println("key " + key);
-            System.out.println("value " + value);
+
             if (StringUtils.isNotEmpty(key) && Objects.nonNull(value)) {
                 switch (key) {
                     case "title":
@@ -113,7 +112,7 @@ public class BookService implements IBookService {
         return BookMappers.convertListBookResponse(bookList);
     }
 
-   // another way search
+
     @Override
     public List<BookResponseDTO> searchBook(SearchRequestDTO dto) {
         ObjectMapper mapper = new ObjectMapper();

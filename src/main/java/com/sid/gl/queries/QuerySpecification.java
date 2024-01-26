@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 public class QuerySpecification<T> implements Specification<T> {
-    private List<SearchCriteria> list = new ArrayList<>();
+    private final List<SearchCriteria> list = new ArrayList<>();
 
     public void add(SearchCriteria criteria) {
         list.add(criteria);
@@ -33,15 +33,11 @@ public class QuerySpecification<T> implements Specification<T> {
                 case LIKE:
                     predicates.add(builder.like(builder.lower(root.get(criteria.getKey())), "%" + criteria.getValue().toString().toLowerCase() + "%"));
                     break;
-
                 case GREATER_THAN_EQUAL:
-
                     Date startDate = formatter.parse(criteria.getValue().toString());
-                   // System.out.println(startDate);
                     predicates.add(builder.greaterThanOrEqualTo(root.get(criteria.getKey()), startDate));
                     break;
                 case LESS_THAN_EQUAL:
-
                     Date endDate = formatter.parse(criteria.getValue().toString());
                     predicates.add(builder.lessThanOrEqualTo(root.get(criteria.getKey()), endDate));
                     break;

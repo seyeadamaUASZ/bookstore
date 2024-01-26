@@ -16,7 +16,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,7 +28,6 @@ import org.togglz.core.util.NamedFeature;
 
 import javax.validation.Valid;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,10 +63,10 @@ public class BookController {
     public ResponseEntity<ApiResponse> createBook(@RequestParam("bookDTO") String request, @RequestParam(value = "file")Optional<MultipartFile> file){
         BookRequestDto bookRequestDto = JsonConverter.convertToBookRequest(request);
         if(!manager.isActive(CREATE_BOOK)){
-            throw new RuntimeException(Translator.toLocale("feature.not.activate"));
+            throw new IllegalArgumentException(Translator.toLocale("feature.not.activate"));
         }
         Book book = storageService.createBook(bookRequestDto,file);
-        //Design pattern Builder
+
         ApiResponse<Book> apiResponse=ApiResponse
                 .<Book>builder()
                 .status(SUCCESS)
@@ -110,18 +108,12 @@ public class BookController {
     )
     @GetMapping("/{bookId}")
     public ResponseEntity<?> getBook(@PathVariable long bookId) {
-
-        //log.info("BookController::getBook by id  {}", bookId);
-
         BookResponseDTO bookResponseDTO = iBookService.getBook(bookId);
         ApiResponse<BookResponseDTO> responseDTO = ApiResponse
                 .<BookResponseDTO>builder()
                 .status(SUCCESS)
                 .results(bookResponseDTO)
                 .build();
-
-        //log.info("BookController::getProduct by id  {} response {}", bookId,BookMappers
-             //   .jsonObjectToString(bookResponseDTO));
 
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }

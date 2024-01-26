@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestControllerAdvice
 public class BookServiceExceptionHandler {
+    private static final String FAILED="FAILED";
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -28,7 +29,7 @@ public class BookServiceExceptionHandler {
                    errors.add(errorDTO);
                });
 
-       apiResponse.setStatus("FAILED");
+       apiResponse.setStatus(FAILED);
        apiResponse.setErrorDTOS(errors);
        return apiResponse;
    }
@@ -37,7 +38,7 @@ public class BookServiceExceptionHandler {
    public ApiResponse<?> handleServiceException(BooknotFoundException exception){
         ApiResponse<?> response = new ApiResponse<>();
         response.setErrorDTOS(Collections.singletonList(new ErrorDTO("", exception.getMessage())));
-        response.setStatus("FAILED");
+        response.setStatus(FAILED);
         return response;
    }
 
@@ -45,7 +46,7 @@ public class BookServiceExceptionHandler {
     public ApiResponse<?> handleServiceBussnessValidatorException(BusinessValidationException exception){
         ApiResponse<?> response = new ApiResponse<>();
         response.setErrorDTOS(Collections.singletonList(new ErrorDTO("", exception.getMessage())));
-        response.setStatus("FAILED");
+        response.setStatus(FAILED);
         return response;
     }
 

@@ -3,7 +3,9 @@ package com.sid.gl.util;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sid.gl.dto.BookRequestDto;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class JsonConverter {
 
     public static BookRequestDto convertToBookRequest(String str){
@@ -14,7 +16,7 @@ public class JsonConverter {
         try{
             dto = mapper.readValue(str, BookRequestDto.class);
         }catch (Exception e){
-            e.printStackTrace();
+            log.info("error convert object ",e);
         }
         return dto;
     }
