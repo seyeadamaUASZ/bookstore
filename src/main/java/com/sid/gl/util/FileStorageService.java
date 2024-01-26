@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.sid.gl.dto.BookRequestDto;
@@ -26,9 +27,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class FileStorageService {
     private final Path fileStorageLocation;
     @Autowired
-    private BookRepository bookRepository;
-
-
+    private  BookRepository bookRepository;
 
     public FileStorageService(Path fileStorageLocation) {
         this.fileStorageLocation = fileStorageLocation;
@@ -50,7 +49,7 @@ public class FileStorageService {
     public Book createBook(BookRequestDto bookRequestDto, Optional<MultipartFile> file) {
        if(file.isPresent()){
            MultipartFile fileBook =  file.get();
-           String fileName = StringUtils.cleanPath(fileBook.getOriginalFilename());
+           String fileName = StringUtils.cleanPath(Objects.requireNonNull(fileBook.getOriginalFilename()));
            String fileDownloadUri="";
            try {
                if(fileName.contains("..")) {
@@ -66,7 +65,7 @@ public class FileStorageService {
 
                bookRequestDto.setFilebook(fileDownloadUri);
                bookRequestDto.setFileName(fileName);
-               System.out.println(" null object "+BookMappers.jsonObjectToString(bookRequestDto));
+               log.info("object {} ",BookMappers.jsonObjectToString(bookRequestDto));
                return bookRepository.save(BookMappers.convertToBook(bookRequestDto));
            }catch (IOException ex) {
                throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
@@ -76,6 +75,4 @@ public class FileStorageService {
        }
 
     }
-
-
 }
