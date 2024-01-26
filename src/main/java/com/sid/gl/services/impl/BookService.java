@@ -16,6 +16,7 @@ import com.sid.gl.util.BookMappers;
 import com.sid.gl.util.Translator;
 import lombok.AllArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.Specification;
@@ -29,6 +30,7 @@ import static com.sid.gl.specifications.BookSpecification.*;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class BookService implements IBookService {
   private BookRepository bookRepository;
 
@@ -40,7 +42,7 @@ public class BookService implements IBookService {
       book = BookMappers.convertToBook(bookRequestDto);
       bookRepository.save(book);
     }catch (Exception ex){
-      ex.printStackTrace();
+      log.error("error to save book ... {} ",ex.getMessage());
     }
     return book;
   }
