@@ -13,6 +13,7 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+
     hikari:
       connection-timeout: 50000
       idle-timeout: 300000
@@ -29,6 +30,8 @@ spring:
       hibernate:
         ddl-auto: update
         show_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+    
 
   # Spring Session properties
 
